@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SASTRERÍA CONTRERAS — Alta Confección</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Montserrat:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #F8F4EE;
+    --ivory: #FAF7F2;
+    --bone: #EDE8DF;
+    --warm-gray: #9A9189;
+    --charcoal: #2A2520;
+    --deep: #1A1510;
+    --gold: #C4A96D;
+    --gold-light: #E2C98A;
+    --gold-dark: #9A7D45;
+    --rosé: #C8A89A;
+    --silk: #D4C5B0;
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-title: 'Playfair Display', Georgia, serif;
+    --font-body: 'Montserrat', sans-serif;
+    --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--ivory);
+    color: var(--charcoal);
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── SCROLLBAR ── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--cream); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+  /* ═══════════════════════════════════════
+     LOADING SCREEN
+  ═══════════════════════════════════════ */
+  #loading {
+    position: fixed; inset: 0; background: var(--deep);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    z-index: 9999; transition: opacity 0.8s ease;
+  }
+  #loading.fade { opacity: 0; pointer-events: none; }
+  .load-letter {
+    font-family: var(--font-display); font-size: 2.5rem; letter-spacing: 0.4rem;
+    color: var(--gold); opacity: 0; transform: translateY(20px);
+    animation: loadIn 0.6s forwards;
+  }
+  .load-sub {
+    font-family: var(--font-body); font-size: 0.65rem; letter-spacing: 0.4rem;
+    color: var(--silk); text-transform: uppercase; margin-top: 1rem;
+    opacity: 0; animation: loadIn 0.6s 0.5s forwards;
+  }
+  .load-bar {
+    width: 120px; height: 1px; background: var(--charcoal); margin-top: 2.5rem;
+    overflow: hidden; opacity: 0; animation: loadIn 0.4s 0.8s forwards;
+  }
+  .load-bar-fill {
+    height: 100%; background: var(--gold);
+    animation: loadBar 1.5s 1s ease forwards;
+  }
+  @keyframes loadIn { to { opacity: 1; transform: translateY(0); } }
+  @keyframes loadBar { from { width: 0; } to { width: 100%; } }
+
+  /* ═══════════════════════════════════════
+     VIEWS
+  ═══════════════════════════════════════ */
+  .view { display: none; min-height: 100vh; }
+  .view.active { display: block; }
+
+  /* ═══════════════════════════════════════
+     NAVBAR
+  ═══════════════════════════════════════ */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.5rem 4rem;
+    background: transparent;
+    transition: var(--transition);
+  }
+  nav.scrolled {
+    background: rgba(248,244,238,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--bone);
+    padding: 1rem 4rem;
+  }
+  .nav-logo {
+    font-family: var(--font-display); font-size: 1.25rem; letter-spacing: 0.2rem;
+    color: var(--cream); font-weight: 300; text-decoration: none;
+    transition: var(--transition);
+  }
+  nav.scrolled .nav-logo { color: var(--charcoal); }
+  .nav-links { display: flex; gap: 2.5rem; align-items: center; }
+  .nav-links a {
+    font-family: var(--font-body); font-size: 0.65rem; letter-spacing: 0.2rem;
+    text-transform: uppercase; color: var(--cream); text-decoration: none;
+    opacity: 0.85; transition: var(--transition); position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 1px;
+    background: var(--gold); transition: width 0.3s ease;
+  }
+  .nav-links a:hover::after { width: 100%; }
+  nav.scrolled .nav-links a { color: var(--charcoal); }
+  .nav-cta {
+    border: 1px solid rgba(255,255,255,0.5) !important;
+    padding: 0.5rem 1.2rem !important;
+    border-radius: 0 !important;
+    opacity: 1 !important;
+    letter-spacing: 0.2rem;
+  }
+  nav.scrolled .nav-cta { border-color: var(--gold) !important; color: var(--gold) !important; }
+  .nav-cta:hover { background: var(--gold) !important; color: var(--ivory) !important; }
+
+  /* ═══════════════════════════════════════
+     HERO
+  ═══════════════════════════════════════ */
+  .hero {
+    min-height: 100vh; position: relative;
+    display: flex; align-items: center;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, var(--deep) 0%, #2d241a 40%, #3a2d20 70%, #1a1510 100%);
+  }
+  .hero-pattern {
+    position: absolute; inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg, transparent, transparent 40px,
+      rgba(196,169,109,0.03) 40px, rgba(196,169,109,0.03) 41px
+    );
+  }
+  .hero-accent {
+    position: absolute; right: -100px; top: 50%; transform: translateY(-50%);
+    width: 600px; height: 600px; border-radius: 50%;
+    background: radial-gradient(ellipse, rgba(196,169,109,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-line {
+    position: absolute; left: 4rem; top: 0; bottom: 0;
+    width: 1px; background: linear-gradient(to bottom, transparent, var(--gold-dark), transparent);
+    opacity: 0.4;
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    padding: 0 4rem; max-width: 800px;
+  }
+  .hero-tag {
+    font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.5rem;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 2rem;
+    opacity: 0; animation: slideUp 0.8s 0.3s forwards;
+  }
+  .hero-title {
+    font-family: var(--font-display); font-size: clamp(4rem, 8vw, 7rem);
+    font-weight: 300; line-height: 1.05; color: var(--cream);
+    opacity: 0; animation: slideUp 0.8s 0.5s forwards;
+  }
+  .hero-title em { font-style: italic; color: var(--gold-light); }
+  .hero-sub {
+    font-family: var(--font-body); font-size: 0.75rem; letter-spacing: 0.15rem;
+    color: var(--silk); line-height: 2; margin-top: 1.5rem; max-width: 420px;
+    opacity: 0; animation: slideUp 0.8s 0.7s forwards;
+  }
+  .hero-actions {
+    display: flex; gap: 1.5rem; margin-top: 3rem;
+    opacity: 0; animation: slideUp 0.8s 0.9s forwards;
+  }
+  .btn-primary {
+    padding: 1rem 2.5rem; background: var(--gold); color: var(--deep);
+    font-family: var(--font-body); font-size: 0.65rem; letter-spacing: 0.25rem;
+    text-transform: uppercase; border: none; cursor: pointer;
+    transition: var(--transition); text-decoration: none; display: inline-block;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-ghost {
+    padding: 1rem 2.5rem; background: transparent;
+    border: 1px solid rgba(255,255,255,0.3); color: var(--cream);
+    font-family: var(--font-body); font-size: 0.65rem; letter-spacing: 0.25rem;
+    text-transform: uppercase; cursor: pointer; transition: var(--transition);
+  }
+  .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+
+  .hero-scroll {
+    position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.8rem;
+    color: var(--silk); opacity: 0.6;
+    font-family: var(--font-body); font-size: 0.55rem; letter-spacing: 0.3rem; text-transform: uppercase;
+    animation: bounce 2s ease infinite;
+  }
+  .hero-scroll::after {
+    content: ''; width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+  }
+  @keyframes bounce {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(6px); }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ═══════════════════════════════════════
+     FEATURES STRIP
+  ═══════════════════════════════════════ */
+  .features {
+    background: var(--deep); padding: 2.5rem 4rem;
+    display: flex; gap: 0; overflow: hidden;
+  }
+  .feature-item {
+    flex: 1; display: flex; align-items: center; gap: 1rem;
+    padding: 0 2rem; border-right: 1px solid rgba(196,169,109,0.2);
+  }
+  .feature-item:last-child { border-right: none; }
+  .feature-icon { font-size: 1.2rem; color: var(--gold); flex-shrink: 0; }
+  .feature-text { font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.15rem; text-transform: uppercase; color: var(--silk); }
+
+  /* ═══════════════════════════════════════
+     COLLECTIONS SECTION
+  ═══════════════════════════════════════ */
+  .section-collections { padding: 8rem 4rem; background: var(--ivory); }
+  .section-header { text-align: center; margin-bottom: 5rem; }
+  .section-tag {
+    font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.4rem;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: var(--font-display); font-size: 3.5rem; font-weight: 300;
+    color: var(--charcoal); line-height: 1.2;
+  }
+  .section-title em { font-style: italic; color: var(--warm-gray); }
+  .collection-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px;
+  }
+  .collection-card {
+    position: relative; overflow: hidden; cursor: pointer;
+    aspect-ratio: 3/4;
+    background: var(--bone);
+  }
+  .collection-card:first-child { grid-row: span 2; aspect-ratio: auto; }
+  .card-img-placeholder {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 4rem; color: var(--silk);
+    transition: transform 0.6s ease;
+  }
+  .collection-card:hover .card-img-placeholder { transform: scale(1.05); }
+  .card-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(26,21,16,0.85) 0%, transparent 50%);
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 2rem;
+    opacity: 0.7; transition: opacity 0.4s ease;
+  }
+  .collection-card:hover .card-overlay { opacity: 1; }
+  .card-tag { font-family: var(--font-body); font-size: 0.55rem; letter-spacing: 0.3rem; text-transform: uppercase; color: var(--gold); margin-bottom: 0.4rem; }
+  .card-title { font-family: var(--font-display); font-size: 1.8rem; font-weight: 300; color: var(--cream); }
+  .card-count { font-family: var(--font-body); font-size: 0.6rem; color: var(--silk); margin-top: 0.3rem; }
+
+  /* ═══════════════════════════════════════
+     CHATBOT
+  ═══════════════════════════════════════ */
+  .chatbot-section {
+    padding: 8rem 4rem; background: var(--charcoal);
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+  }
+  .chatbot-info .section-tag { color: var(--gold); }
+  .chatbot-info .section-title { color: var(--cream); text-align: left; }
+  .chatbot-info p { font-family: var(--font-body); font-size: 0.75rem; line-height: 2; color: var(--silk); margin-top: 1.5rem; }
+  .chatbot-features { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1rem; }
+  .chat-feature { display: flex; align-items: center; gap: 1rem; }
+  .chat-dot { width: 6px; height: 6px; background: var(--gold); flex-shrink: 0; }
+  .chat-feature span { font-family: var(--font-body); font-size: 0.65rem; letter-spacing: 0.1rem; color: var(--silk); }
+
+  .chatbot-widget {
+    background: var(--deep); border: 1px solid rgba(196,169,109,0.2);
+    overflow: hidden; display: flex; flex-direction: column; height: 500px;
+  }
+  .chat-header {
+    padding: 1.2rem 1.5rem;
+    background: rgba(196,169,109,0.1); border-bottom: 1px solid rgba(196,169,109,0.2);
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .chat-avatar {
+    width: 36px; height: 36px; background: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 1rem; color: var(--deep); font-weight: 600;
+  }
+  .chat-name { font-family: var(--font-display); font-size: 1.1rem; color: var(--cream); }
+  .chat-status { font-family: var(--font-body); font-size: 0.55rem; letter-spacing: 0.15rem; color: var(--gold); }
+  .chat-status::before { content: '●'; margin-right: 4px; }
+  .chat-messages {
+    flex: 1; overflow-y: auto; padding: 1.5rem;
+    display: flex; flex-direction: column; gap: 1rem;
+    scrollbar-width: thin; scrollbar-color: var(--gold-dark) transparent;
+  }
+  .msg {
+    max-width: 78%; animation: msgIn 0.3s ease;
+  }
+  .msg.bot { align-self: flex-start; }
+  .msg.user { align-self: flex-end; }
+  .msg-bubble {
+    padding: 0.8rem 1.1rem;
+    font-family: var(--font-body); font-size: 0.72rem; line-height: 1.7;
+  }
+  .msg.bot .msg-bubble { background: rgba(196,169,109,0.12); color: var(--silk); border-left: 2px solid var(--gold-dark); }
+  .msg.user .msg-bubble { background: var(--gold); color: var(--deep); }
+  .msg-time { font-size: 0.5rem; color: var(--warm-gray); margin-top: 0.3rem; letter-spacing: 0.1rem; }
+  .msg.user .msg-time { text-align: right; }
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .typing-indicator {
+    display: none; align-self: flex-start;
+    padding: 0.8rem 1.1rem;
+    background: rgba(196,169,109,0.12); border-left: 2px solid var(--gold-dark);
+  }
+  .typing-dots { display: flex; gap: 4px; }
+  .typing-dots span {
+    width: 5px; height: 5px; background: var(--gold); border-radius: 50%;
+    animation: typeDot 1.2s ease infinite;
+  }
+  .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typeDot {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-4px); opacity: 1; }
+  }
+  .chat-input-area {
+    padding: 1rem 1.2rem; border-top: 1px solid rgba(196,169,109,0.2);
+    display: flex; gap: 0.8rem;
+  }
+  .chat-input {
+    flex: 1; background: rgba(255,255,255,0.05); border: 1px solid rgba(196,169,109,0.2);
+    padding: 0.7rem 1rem; color: var(--cream);
+    font-family: var(--font-body); font-size: 0.72rem;
+    outline: none; transition: border-color 0.3s;
+  }
+  .chat-input:focus { border-color: var(--gold); }
+  .chat-input::placeholder { color: var(--warm-gray); }
+  .chat-send {
+    background: var(--gold); border: none; padding: 0.7rem 1.2rem;
+    color: var(--deep); cursor: pointer; font-size: 0.85rem;
+    transition: background 0.3s;
+  }
+  .chat-send:hover { background: var(--gold-light); }
+  .chat-suggestions { display: flex; gap: 0.5rem; flex-wrap: wrap; padding: 0.5rem 1.2rem 0; }
+  .suggestion-pill {
+    background: transparent; border: 1px solid rgba(196,169,109,0.3);
+    color: var(--gold); font-family: var(--font-body); font-size: 0.55rem;
+    letter-spacing: 0.1rem; padding: 0.35rem 0.8rem; cursor: pointer;
+    transition: var(--transition);
+  }
+  .suggestion-pill:hover { background: rgba(196,169,109,0.15); }
+
+  /* ═══════════════════════════════════════
+     LOGIN MODAL
+  ═══════════════════════════════════════ */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 500;
+    background: rgba(26,21,16,0.85); backdrop-filter: blur(8px);
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--ivory); width: 460px; max-width: 95vw;
+    padding: 3.5rem; position: relative;
+    animation: modalIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  @keyframes modalIn {
+    from { opacity: 0; transform: scale(0.9) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+  }
+  .modal-close {
+    position: absolute; top: 1.5rem; right: 1.5rem;
+    background: none; border: none; cursor: pointer; font-size: 1.2rem;
+    color: var(--warm-gray); transition: color 0.3s;
+  }
+  .modal-close:hover { color: var(--charcoal); }
+  .modal-logo { font-family: var(--font-display); font-size: 1.3rem; letter-spacing: 0.15rem; color: var(--charcoal); margin-bottom: 0.5rem; }
+  .modal-sub { font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.2rem; text-transform: uppercase; color: var(--warm-gray); margin-bottom: 2.5rem; }
+  .form-group { margin-bottom: 1.5rem; }
+  .form-label { display: block; font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.2rem; text-transform: uppercase; color: var(--warm-gray); margin-bottom: 0.6rem; }
+  .form-input {
+    width: 100%; background: transparent; border: none; border-bottom: 1px solid var(--bone);
+    padding: 0.7rem 0; color: var(--charcoal);
+    font-family: var(--font-body); font-size: 0.85rem;
+    outline: none; transition: border-color 0.3s;
+  }
+  .form-input:focus { border-color: var(--gold); }
+  .role-selector { display: flex; gap: 0; margin-bottom: 2rem; }
+  .role-btn {
+    flex: 1; padding: 0.8rem; background: var(--bone); border: none; cursor: pointer;
+    font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.2rem; text-transform: uppercase;
+    color: var(--warm-gray); transition: var(--transition);
+  }
+  .role-btn.active { background: var(--charcoal); color: var(--gold); }
+  .login-btn {
+    width: 100%; padding: 1rem; background: var(--charcoal); border: none; cursor: pointer;
+    font-family: var(--font-body); font-size: 0.65rem; letter-spacing: 0.3rem; text-transform: uppercase;
+    color: var(--cream); transition: background 0.3s; margin-top: 1rem;
+  }
+  .login-btn:hover { background: var(--deep); }
+  .login-error { font-family: var(--font-body); font-size: 0.65rem; color: #c0392b; text-align: center; margin-top: 0.8rem; display: none; }
+
+  /* ═══════════════════════════════════════
+     DASHBOARD — ADMIN
+  ═══════════════════════════════════════ */
+  #admin-view { background: var(--cream); }
+  .app-header {
+    background: var(--deep); padding: 0 2.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px; border-bottom: 1px solid rgba(196,169,109,0.2);
+    position: sticky; top: 0; z-index: 50;
+  }
+  .app-logo { font-family: var(--font-display); font-size: 1.05rem; letter-spacing: 0.15rem; color: var(--gold); }
+  .app-nav { display: flex; gap: 0; }
+  .app-nav-item {
+    padding: 0 1.5rem; height: 64px; display: flex; align-items: center;
+    font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.15rem; text-transform: uppercase;
+    color: var(--silk); cursor: pointer; border-bottom: 2px solid transparent;
+    transition: var(--transition); background: none; border-top: none; border-left: none; border-right: none;
+  }
+  .app-nav-item:hover { color: var(--gold); }
+  .app-nav-item.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .app-user {
+    display: flex; align-items: center; gap: 0.8rem;
+    font-family: var(--font-body); font-size: 0.65rem; color: var(--silk);
+  }
+  .app-avatar {
+    width: 32px; height: 32px; background: var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 1rem; color: var(--deep); cursor: pointer;
+  }
+  .logout-btn {
+    background: none; border: 1px solid rgba(196,169,109,0.3); color: var(--gold);
+    font-family: var(--font-body); font-size: 0.55rem; letter-spacing: 0.15rem; text-transform: uppercase;
+    padding: 0.4rem 0.8rem; cursor: pointer; transition: var(--transition);
+  }
+  .logout-btn:hover { background: rgba(196,169,109,0.1); }
+
+  /* DASHBOARD CONTENT */
+  .dashboard-content { padding: 2.5rem; }
+  .dashboard-greeting {
+    font-family: var(--font-display); font-size: 2.2rem; font-weight: 300;
+    color: var(--charcoal); margin-bottom: 0.5rem;
+  }
+  .dashboard-greeting em { font-style: italic; color: var(--gold-dark); }
+  .dashboard-date { font-family: var(--font-body); font-size: 0.62rem; letter-spacing: 0.2rem; color: var(--warm-gray); margin-bottom: 2.5rem; }
+
+  .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2.5rem; }
+  .metric-card {
+    background: var(--ivory); border: 1px solid var(--bone);
+    padding: 1.5rem; position: relative; overflow: hidden;
+    transition: var(--transition);
+  }
+  .metric-card:hover { transform: translateY(-3px); border-color: var(--gold); }
+  .metric-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: var(--gold); transform: scaleX(0); transition: transform 0.4s;
+    transform-origin: left;
+  }
+  .metric-card:hover::before { transform: scaleX(1); }
+  .metric-label { font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.2rem; text-transform: uppercase; color: var(--warm-gray); margin-bottom: 0.8rem; }
+  .metric-value { font-family: var(--font-display); font-size: 2.5rem; font-weight: 400; color: var(--charcoal); }
+  .metric-sub { font-family: var(--font-body); font-size: 0.6rem; color: var(--gold-dark); margin-top: 0.4rem; }
+  .metric-trend { position: absolute; top: 1.2rem; right: 1.2rem; font-size: 1.2rem; }
+
+  .dashboard-row { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+
+  .panel {
+    background: var(--ivory); border: 1px solid var(--bone); padding: 1.8rem;
+  }
+  .panel-title {
+    font-family: var(--font-display); font-size: 1.3rem; font-weight: 400;
+    color: var(--charcoal); margin-bottom: 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .panel-tag { font-family: var(--font-body); font-size: 0.55rem; letter-spacing: 0.15rem; text-transform: uppercase; color: var(--gold); }
+
+  /* Orders Table */
+  .orders-table { width: 100%; border-collapse: collapse; }
+  .orders-table th {
+    font-family: var(--font-body); font-size: 0.55rem; letter-spacing: 0.2rem;
+    text-transform: uppercase; color: var(--warm-gray); padding: 0.6rem 0;
+    border-bottom: 1px solid var(--bone); text-align: left; font-weight: 400;
+  }
+  .orders-table td {
+    padding: 0.9rem 0; border-bottom: 1px solid rgba(237,232,223,0.5);
+    font-family: var(--font-body); font-size: 0.7rem; color: var(--charcoal);
+  }
+  .order-status {
+    display: inline-block; padding: 0.2rem 0.7rem;
+    font-size: 0.55rem; letter-spacing: 0.15rem; text-transform: uppercase;
+  }
+  .status-en-proceso { background: rgba(196,169,109,0.15); color: var(--gold-dark); }
+  .status-completado { background: rgba(80,160,110,0.12); color: #2d7a4f; }
+  .status-pendiente { background: rgba(180,60,60,0.1); color: #a33030; }
+
+  /* Bar chart */
+  .bar-chart { display: flex; flex-direction: column; gap: 0.8rem; }
+  .bar-item { display: flex; align-items: center; gap: 1rem; }
+  .bar-label { font-family: var(--font-body); font-size: 0.62rem; color: var(--warm-gray); width: 70px; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 6px; background: var(--bone); overflow: hidden; }
+  .bar-fill { height: 100%; background: linear-gradient(to right, var(--gold-dark), var(--gold-light)); transition: width 1s ease; }
+  .bar-val { font-family: var(--font-body); font-size: 0.62rem; color: var(--charcoal); width: 40px; text-align: right; }
+
+  /* Recent clients */
+  .clients-list { display: flex; flex-direction: column; gap: 1rem; }
+  .client-item { display: flex; align-items: center; gap: 1rem; }
+  .client-avatar {
+    width: 36px; height: 36px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 1rem;
+    background: var(--bone); color: var(--warm-gray);
+  }
+  .client-name { font-family: var(--font-body); font-size: 0.72rem; color: var(--charcoal); }
+  .client-detail { font-family: var(--font-body); font-size: 0.6rem; color: var(--warm-gray); }
+  .client-amount { margin-left: auto; font-family: var(--font-display); font-size: 1rem; color: var(--gold-dark); }
+
+  /* ═══════════════════════════════════════
+     USER VIEW — CATALOG
+  ═══════════════════════════════════════ */
+  #user-view { background: var(--ivory); }
+  .catalog-header {
+    background: var(--ivory); padding: 6rem 4rem 3rem;
+    border-bottom: 1px solid var(--bone); text-align: center;
+  }
+  .catalog-title { font-family: var(--font-display); font-size: 3rem; font-weight: 300; color: var(--charcoal); }
+  .catalog-title em { font-style: italic; color: var(--warm-gray); }
+  .catalog-filters {
+    display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;
+  }
+  .filter-btn {
+    background: transparent; border: 1px solid var(--bone); padding: 0.5rem 1.5rem;
+    font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.2rem; text-transform: uppercase;
+    color: var(--warm-gray); cursor: pointer; transition: var(--transition);
+  }
+  .filter-btn.active, .filter-btn:hover { border-color: var(--gold); color: var(--charcoal); background: var(--bone); }
+
+  .catalog-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px;
+    background: var(--bone); padding: 1px;
+  }
+  .product-card {
+    background: var(--ivory); cursor: pointer; transition: var(--transition);
+    position: relative; overflow: hidden; group: true;
+  }
+  .product-card:hover { z-index: 2; transform: scale(1.02); box-shadow: 0 20px 60px rgba(26,21,16,0.15); }
+  .product-img {
+    aspect-ratio: 3/4; background: var(--bone);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 3.5rem; color: var(--silk);
+    transition: transform 0.6s ease; position: relative; overflow: hidden;
+  }
+  .product-card:hover .product-img { transform: scale(1.05); }
+  .product-badge {
+    position: absolute; top: 1rem; left: 1rem;
+    background: var(--charcoal); color: var(--gold);
+    font-family: var(--font-body); font-size: 0.5rem; letter-spacing: 0.2rem; text-transform: uppercase;
+    padding: 0.3rem 0.7rem;
+  }
+  .product-info { padding: 1.2rem; }
+  .product-category { font-family: var(--font-body); font-size: 0.55rem; letter-spacing: 0.2rem; text-transform: uppercase; color: var(--warm-gray); margin-bottom: 0.3rem; }
+  .product-name { font-family: var(--font-display); font-size: 1.1rem; color: var(--charcoal); margin-bottom: 0.5rem; }
+  .product-price { font-family: var(--font-body); font-size: 0.8rem; color: var(--gold-dark); font-weight: 500; }
+  .product-actions { display: flex; gap: 0.5rem; padding: 0 1.2rem 1.2rem; }
+  .add-cart-btn {
+    flex: 1; background: var(--charcoal); border: none; padding: 0.7rem;
+    color: var(--cream); font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.15rem; text-transform: uppercase;
+    cursor: pointer; transition: background 0.3s;
+  }
+  .add-cart-btn:hover { background: var(--deep); }
+  .wishlist-btn {
+    width: 36px; background: var(--bone); border: 1px solid var(--bone);
+    color: var(--warm-gray); cursor: pointer; transition: var(--transition);
+    display: flex; align-items: center; justify-content: center; font-size: 0.9rem;
+  }
+  .wishlist-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── CART SIDEBAR ── */
+  .cart-sidebar {
+    position: fixed; right: 0; top: 0; bottom: 0; width: 400px;
+    background: var(--ivory); border-left: 1px solid var(--bone);
+    transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 200; display: flex; flex-direction: column;
+  }
+  .cart-sidebar.open { transform: translateX(0); }
+  .cart-header-bar {
+    padding: 1.5rem 1.8rem; border-bottom: 1px solid var(--bone);
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .cart-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 300; color: var(--charcoal); }
+  .cart-close { background: none; border: none; cursor: pointer; font-size: 1.1rem; color: var(--warm-gray); }
+  .cart-items { flex: 1; overflow-y: auto; padding: 1.5rem 1.8rem; }
+  .cart-item { display: flex; gap: 1rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--bone); }
+  .cart-item-img {
+    width: 70px; height: 90px; background: var(--bone); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--font-display); font-size: 1.8rem; color: var(--silk);
+  }
+  .cart-item-name { font-family: var(--font-display); font-size: 1rem; color: var(--charcoal); margin-bottom: 0.3rem; }
+  .cart-item-detail { font-family: var(--font-body); font-size: 0.62rem; color: var(--warm-gray); }
+  .cart-item-price { font-family: var(--font-body); font-size: 0.75rem; color: var(--gold-dark); margin-top: 0.5rem; font-weight: 500; }
+  .cart-item-remove { margin-left: auto; background: none; border: none; cursor: pointer; color: var(--warm-gray); font-size: 0.9rem; align-self: flex-start; }
+  .cart-footer { padding: 1.5rem 1.8rem; border-top: 1px solid var(--bone); }
+  .cart-total-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1.2rem; }
+  .cart-total-label { font-family: var(--font-body); font-size: 0.6rem; letter-spacing: 0.2rem; text-transform: uppercase; color: var(--warm-gray); }
+  .cart-total-value { font-family: var(--font-display); font-size: 1.8rem; color: var(--charcoal); }
+  .checkout-btn {
+    width: 100%; background: var(--charcoal); border: none; padding: 1rem;
+    color: var(--cream); font-family: var(--font-body); font-size: 0.65rem; letter-spacing: 0.3rem; text-transform: uppercase;
+    cursor: pointer; transition: background 0.3s;
+  }
+  .checkout-btn:hover { background: var(--deep); }
+  .cart-empty { text-align: center; padding: 3rem; font-family: var(--font-display); font-size: 1.2rem; color: var(--silk); font-style: italic; }
+
+  /* Cart badge */
+  .cart-fab {
+    position: fixed; bottom: 2rem; right: 2rem; z-index: 150;
+    background: var(--charcoal); color: var(--cream);
+    width: 56px; height: 56px; cursor: pointer; border: none;
+    display: none; align-items: center; justify-content: center;
+    font-size: 1.2rem; transition: var(--transition);
+    box-shadow: 0 4px 20px rgba(26,21,16,0.3);
+  }
+  .cart-fab:hover { background: var(--deep); transform: translateY(-3px); }
+  .cart-badge {
+    position: absolute; top: -6px; right: -6px;
+    width: 20px; height: 20px; background: var(--gold); border-radius: 50%;
+    font-family: var(--font-body); font-size: 0.6rem; color: var(--deep);
+    display: flex; align-items: center; justify-content: center; font-weight: 500;
+  }
+  .user-header-bar {
+    background: var(--deep); height: 64px; padding: 0 2.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 50;
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(20px);
+    background: var(--charcoal); color: var(--cream);
+    padding: 0.8rem 1.8rem; font-family: var(--font-body); font-size: 0.7rem; letter-spacing: 0.1rem;
+    opacity: 0; transition: all 0.4s ease; pointer-events: none; z-index: 300;
+    border-left: 3px solid var(--gold);
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 2rem; }
+    .hero-content { padding: 0 2rem; }
+    .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+    .dashboard-row { grid-template-columns: 1fr; }
+    .catalog-grid { grid-template-columns: repeat(2, 1fr); }
+    .chatbot-section { grid-template-columns: 1fr; gap: 3rem; padding: 4rem 2rem; }
+    .collection-grid { grid-template-columns: 1fr 1fr; }
+    .collection-card:first-child { grid-row: auto; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LOADING -->
+<div id="loading">
+  <div class="load-letter">SASTRERÍA CONTRERAS</div>
+  <div class="load-sub">Alta Confección · Artesanía Exclusiva</div>
+  <div class="load-bar"><div class="load-bar-fill"></div></div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeLogin()">✕</button>
+    <div class="modal-logo">SASTRERÍA CONTRERAS</div>
+    <div class="modal-sub">Acceso a tu cuenta</div>
+    <div class="role-selector">
+      <button class="role-btn active" id="roleAdmin" onclick="selectRole('admin')">Administrador</button>
+      <button class="role-btn" id="roleUser" onclick="selectRole('user')">Cliente</button>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Correo electrónico</label>
+      <input class="form-input" type="email" id="loginEmail" placeholder="correo@sastreria-contreras.com" autocomplete="off">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Contraseña</label>
+      <input class="form-input" type="password" id="loginPass" placeholder="••••••••">
+    </div>
+    <div class="login-error" id="loginError">Credenciales incorrectas. Intenta de nuevo.</div>
+    <button class="login-btn" onclick="doLogin()">Ingresar</button>
+    <p style="font-family:var(--font-body);font-size:0.58rem;color:var(--warm-gray);text-align:center;margin-top:1.5rem;line-height:1.8;">
+      Demo — Admin: <strong>admin@sastreria-contreras.com</strong> / <strong>admin123</strong><br>
+      Cliente: <strong>cliente@sastreria-contreras.com</strong> / <strong>cliente123</strong>
+    </p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     LANDING PAGE
+══════════════════════════════════ -->
+<div class="view active" id="landing-view">
+
+  <nav id="mainNav">
+    <a href="#" class="nav-logo">SASTRERÍA CONTRERAS</a>
+    <div class="nav-links">
+      <a href="#">Colecciones</a>
+      <a href="#">Atelier</a>
+      <a href="#">Nosotros</a>
+      <a href="#" class="nav-cta" onclick="openLogin()">Ingresar</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-pattern"></div>
+    <div class="hero-accent"></div>
+    <div class="hero-line"></div>
+    <div class="hero-content">
+      <div class="hero-tag">Colección 2025 · Alta Confección</div>
+      <h1 class="hero-title">El arte de<br><em>vestir</em><br>con alma.</h1>
+      <p class="hero-sub">Cada prenda es una historia bordada a mano. Diseños exclusivos para quienes entienden que la elegancia no se compra — se cultiva.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="openLogin()">Explorar Catálogo</button>
+        <button class="btn-ghost">Ver Lookbook</button>
+      </div>
+    </div>
+    <div class="hero-scroll">Descubrir</div>
+  </section>
+
+  <!-- FEATURES -->
+  <div class="features">
+    <div class="feature-item">
+      <div class="feature-icon">✦</div>
+      <div class="feature-text">Confección Artesanal</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">✦</div>
+      <div class="feature-text">Materiales Premium</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">✦</div>
+      <div class="feature-text">Diseños Exclusivos</div>
+    </div>
+    <div class="feature-item">
+      <div class="feature-icon">✦</div>
+      <div class="feature-text">Envíos a Perú</div>
+    </div>
+  </div>
+
+  <!-- COLLECTIONS -->
+  <section class="section-collections">
+    <div class="section-header">
+      <div class="section-tag">Explorar</div>
+      <h2 class="section-title">Nuestras <em>Colecciones</em></h2>
+    </div>
+    <div class="collection-grid">
+      <div class="collection-card" style="background:linear-gradient(135deg,#2A2520,#3d3028)">
+        <div class="card-img-placeholder" style="font-size:7rem;opacity:0.3">👗</div>
+        <div class="card-overlay">
+          <div class="card-tag">Temporada Principal</div>
+          <div class="card-title">Noche & Gala</div>
+          <div class="card-count">24 prendas</div>
+        </div>
+      </div>
+      <div class="collection-card" style="background:linear-gradient(135deg,#3a2d20,#4a3826)">
+        <div class="card-img-placeholder">👔</div>
+        <div class="card-overlay">
+          <div class="card-tag">Masculino</div>
+          <div class="card-title">Formal</div>
+          <div class="card-count">18 prendas</div>
+        </div>
+      </div>
+      <div class="collection-card" style="background:linear-gradient(135deg,#2d3a30,#3a4d3e)">
+        <div class="card-img-placeholder">🥻</div>
+        <div class="card-overlay">
+          <div class="card-tag">Casual Chic</div>
+          <div class="card-title">Día a Día</div>
+          <div class="card-count">32 prendas</div>
+        </div>
+      </div>
+      <div class="collection-card" style="background:linear-gradient(135deg,#3a2830,#4a3040)">
+        <div class="card-img-placeholder">🧥</div>
+        <div class="card-overlay">
+          <div class="card-tag">Premium</div>
+          <div class="card-title">Abrigos</div>
+          <div class="card-count">12 prendas</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHATBOT SECTION -->
+  <section class="chatbot-section">
+    <div class="chatbot-info">
+      <div class="section-tag">Asistente IA</div>
+      <h2 class="section-title" style="text-align:left;color:var(--cream);font-size:2.8rem;">Tu estilista<br><em>personal</em>.</h2>
+      <p>Nuestro asistente de inteligencia artificial te guía en cada decisión de moda. Desde combinar colores hasta encontrar la prenda perfecta para cada ocasión.</p>
+      <div class="chatbot-features">
+        <div class="chat-feature"><div class="chat-dot"></div><span>Asesoría de estilo personalizada</span></div>
+        <div class="chat-feature"><div class="chat-dot"></div><span>Recomendaciones por ocasión</span></div>
+        <div class="chat-feature"><div class="chat-dot"></div><span>Guía de tallas y medidas</span></div>
+        <div class="chat-feature"><div class="chat-dot"></div><span>Disponible las 24 horas</span></div>
+      </div>
+    </div>
+    <div class="chatbot-widget">
+      <div class="chat-header">
+        <div class="chat-avatar">M</div>
+        <div>
+          <div class="chat-name">Sophie — Estilista SASTRERÍA CONTRERAS</div>
+          <div class="chat-status">En línea ahora</div>
+        </div>
+      </div>
+      <div class="chat-suggestions">
+        <button class="suggestion-pill" onclick="sendSuggestion('¿Qué prenda es ideal para una gala?')">Gala 🥂</button>
+        <button class="suggestion-pill" onclick="sendSuggestion('¿Cuáles son las tendencias 2025?')">Tendencias</button>
+        <button class="suggestion-pill" onclick="sendSuggestion('¿Cómo elijo mi talla?')">Tallas</button>
+        <button class="suggestion-pill" onclick="sendSuggestion('¿Tienen envíos a Huancayo?')">Envíos</button>
+      </div>
+      <div class="chat-messages" id="chatMessages">
+        <div class="msg bot">
+          <div class="msg-bubble">Hola, soy Sophie, tu asistente de estilo SASTRERÍA CONTRERAS. ✨ ¿En qué puedo ayudarte hoy? Cuéntame para qué ocasión buscas ropa.</div>
+          <div class="msg-time">Ahora · Sophie</div>
+        </div>
+      </div>
+      <div class="typing-indicator" id="typingIndicator">
+        <div class="typing-dots"><span></span><span></span><span></span></div>
+      </div>
+      <div class="chat-input-area">
+        <input class="chat-input" id="chatInput" placeholder="Escribe tu consulta..." onkeydown="if(event.key==='Enter')sendChat()">
+        <button class="chat-send" onclick="sendChat()">→</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer style="background:var(--deep);padding:3rem 4rem;display:flex;align-items:center;justify-content:space-between;border-top:1px solid rgba(196,169,109,0.15);">
+    <div style="font-family:var(--font-display);font-size:1.5rem;letter-spacing:0.3rem;color:var(--gold)">SASTRERÍA CONTRERAS</div>
+    <div style="font-family:var(--font-body);font-size:0.58rem;letter-spacing:0.15rem;color:var(--warm-gray);text-align:center">© 2025 SASTRERÍA CONTRERAS · Alta Confección · Huancayo, Perú</div>
+    <button class="btn-ghost" onclick="openLogin()" style="font-size:0.58rem;padding:0.6rem 1.5rem">Acceder →</button>
+  </footer>
+</div>
+
+<!-- ══════════════════════════════════
+     ADMIN DASHBOARD
+══════════════════════════════════ -->
+<div class="view" id="admin-view">
+  <header class="app-header">
+    <div class="app-logo">SASTRERÍA CONTRERAS</div>
+    <nav class="app-nav">
+      <button class="app-nav-item active">Dashboard</button>
+      <button class="app-nav-item">Pedidos</button>
+      <button class="app-nav-item">Catálogo</button>
+      <button class="app-nav-item">Clientes</button>
+      <button class="app-nav-item">Reportes</button>
+    </nav>
+    <div class="app-user">
+      <span>Administrador</span>
+      <div class="app-avatar">A</div>
+      <button class="logout-btn" onclick="doLogout()">Salir</button>
+    </div>
+  </header>
+
+  <div class="dashboard-content">
+    <div class="dashboard-greeting">Buenos días, <em>Atelier</em></div>
+    <div class="dashboard-date" id="currentDate"></div>
+
+    <!-- METRICS -->
+    <div class="metrics-grid">
+      <div class="metric-card">
+        <div class="metric-trend">📈</div>
+        <div class="metric-label">Ventas este mes</div>
+        <div class="metric-value">S/ 24,830</div>
+        <div class="metric-sub">↑ 18% vs mes anterior</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-trend">🛍</div>
+        <div class="metric-label">Pedidos activos</div>
+        <div class="metric-value">47</div>
+        <div class="metric-sub">12 pendientes de corte</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-trend">👥</div>
+        <div class="metric-label">Clientes nuevos</div>
+        <div class="metric-value">23</div>
+        <div class="metric-sub">Este mes</div>
+      </div>
+      <div class="metric-card">
+        <div class="metric-trend">⏱</div>
+        <div class="metric-label">Tiempo prom. confección</div>
+        <div class="metric-value">4.2d</div>
+        <div class="metric-sub">↓ 0.8 días mejora</div>
+      </div>
+    </div>
+
+    <!-- ROW 1 -->
+    <div class="dashboard-row">
+      <div class="panel">
+        <div class="panel-title">
+          Pedidos recientes
+          <span class="panel-tag">Ver todos →</span>
+        </div>
+        <table class="orders-table">
+          <thead>
+            <tr>
+              <th>#Pedido</th>
+              <th>Cliente</th>
+              <th>Prenda</th>
+              <th>Estado</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>#2501</td><td>María V.</td><td>Vestido Noche</td><td><span class="order-status status-en-proceso">En proceso</span></td><td>S/ 680</td></tr>
+            <tr><td>#2500</td><td>Carlos M.</td><td>Traje Formal</td><td><span class="order-status status-completado">Completado</span></td><td>S/ 1,200</td></tr>
+            <tr><td>#2499</td><td>Lucía R.</td><td>Blusa Seda</td><td><span class="order-status status-pendiente">Pendiente</span></td><td>S/ 320</td></tr>
+            <tr><td>#2498</td><td>Andrés T.</td><td>Abrigo Camel</td><td><span class="order-status status-en-proceso">En proceso</span></td><td>S/ 890</td></tr>
+            <tr><td>#2497</td><td>Sofia P.</td><td>Conjunto Gala</td><td><span class="order-status status-completado">Completado</span></td><td>S/ 1,540</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <div class="panel-title">
+          Ventas por categoría
+          <span class="panel-tag">Jun 2025</span>
+        </div>
+        <div class="bar-chart">
+          <div class="bar-item">
+            <div class="bar-label">Gala / Noche</div>
+            <div class="bar-track"><div class="bar-fill" style="width:82%"></div></div>
+            <div class="bar-val">82%</div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label">Formal</div>
+            <div class="bar-track"><div class="bar-fill" style="width:65%"></div></div>
+            <div class="bar-val">65%</div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label">Casual Chic</div>
+            <div class="bar-track"><div class="bar-fill" style="width:48%"></div></div>
+            <div class="bar-val">48%</div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label">Abrigos</div>
+            <div class="bar-track"><div class="bar-fill" style="width:35%"></div></div>
+            <div class="bar-val">35%</div>
+          </div>
+          <div class="bar-item">
+            <div class="bar-label">Accesorios</div>
+            <div class="bar-track"><div class="bar-fill" style="width:22%"></div></div>
+            <div class="bar-val">22%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROW 2 -->
+    <div class="dashboard-row">
+      <div class="panel">
+        <div class="panel-title">Estado del taller<span class="panel-tag">Tiempo real</span></div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
+          <div style="text-align:center;padding:1.5rem;background:var(--cream);border:1px solid var(--bone)">
+            <div style="font-family:var(--font-display);font-size:2.2rem;color:#2d7a4f">8</div>
+            <div style="font-family:var(--font-body);font-size:0.58rem;letter-spacing:0.2rem;text-transform:uppercase;color:var(--warm-gray);margin-top:0.3rem">Cortando</div>
+          </div>
+          <div style="text-align:center;padding:1.5rem;background:var(--cream);border:1px solid var(--bone)">
+            <div style="font-family:var(--font-display);font-size:2.2rem;color:var(--gold-dark)">14</div>
+            <div style="font-family:var(--font-body);font-size:0.58rem;letter-spacing:0.2rem;text-transform:uppercase;color:var(--warm-gray);margin-top:0.3rem">Cosiendo</div>
+          </div>
+          <div style="text-align:center;padding:1.5rem;background:var(--cream);border:1px solid var(--bone)">
+            <div style="font-family:var(--font-display);font-size:2.2rem;color:#a33030">5</div>
+            <div style="font-family:var(--font-body);font-size:0.58rem;letter-spacing:0.2rem;text-transform:uppercase;color:var(--warm-gray);margin-top:0.3rem">En revisión</div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Clientes VIP<span class="panel-tag">Top compradores</span></div>
+        <div class="clients-list">
+          <div class="client-item">
+            <div class="client-avatar">MV</div>
+            <div><div class="client-name">María Valdiviezo</div><div class="client-detail">12 pedidos · Lima</div></div>
+            <div class="client-amount">S/ 8,400</div>
+          </div>
+          <div class="client-item">
+            <div class="client-avatar">SP</div>
+            <div><div class="client-name">Sofia Paredes</div><div class="client-detail">9 pedidos · Huancayo</div></div>
+            <div class="client-amount">S/ 6,200</div>
+          </div>
+          <div class="client-item">
+            <div class="client-avatar">AT</div>
+            <div><div class="client-name">Andrés Torres</div><div class="client-detail">7 pedidos · Cusco</div></div>
+            <div class="client-amount">S/ 5,100</div>
+          </div>
+          <div class="client-item">
+            <div class="client-avatar">LR</div>
+            <div><div class="client-name">Lucía Ríos</div><div class="client-detail">6 pedidos · Arequipa</div></div>
+            <div class="client-amount">S/ 3,890</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     USER VIEW — CATALOG
+══════════════════════════════════ -->
+<div class="view" id="user-view">
+  <header class="user-header-bar">
+    <div style="font-family:var(--font-display);font-size:1.4rem;letter-spacing:0.3rem;color:var(--gold)">SASTRERÍA CONTRERAS</div>
+    <div style="font-family:var(--font-body);font-size:0.62rem;letter-spacing:0.15rem;color:var(--silk)">Bienvenida, Cliente</div>
+    <div style="display:flex;align-items:center;gap:1rem;">
+      <button class="logout-btn" onclick="doLogout()">Salir</button>
+    </div>
+  </header>
+
+  <div class="catalog-header">
+    <div class="section-tag">Colección 2025</div>
+    <h1 class="catalog-title">Nuestro <em>Catálogo</em></h1>
+    <div class="catalog-filters">
+      <button class="filter-btn active" onclick="filterCatalog(this,'all')">Todo</button>
+      <button class="filter-btn" onclick="filterCatalog(this,'gala')">Gala & Noche</button>
+      <button class="filter-btn" onclick="filterCatalog(this,'formal')">Formal</button>
+      <button class="filter-btn" onclick="filterCatalog(this,'casual')">Casual Chic</button>
+      <button class="filter-btn" onclick="filterCatalog(this,'abrigos')">Abrigos</button>
+    </div>
+  </div>
+
+  <div class="catalog-grid" id="catalogGrid"></div>
+
+  <!-- Cart Sidebar -->
+  <div class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header-bar">
+      <div class="cart-title">Mi Selección</div>
+      <button class="cart-close" onclick="toggleCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cartItems">
+      <div class="cart-empty">Tu selección está vacía.<br><em>Agrega prendas del catálogo.</em></div>
+    </div>
+    <div class="cart-footer">
+      <div class="cart-total-row">
+        <div class="cart-total-label">Total estimado</div>
+        <div class="cart-total-value" id="cartTotal">S/ 0</div>
+      </div>
+      <button class="checkout-btn" onclick="checkout()">Solicitar Cotización →</button>
+    </div>
+  </div>
+
+  <button class="cart-fab" id="cartFab" onclick="toggleCart()">
+    🛍
+    <span class="cart-badge" id="cartBadge">0</span>
+  </button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ── BOOT ── */
+  setTimeout(() => {
+    document.getElementById('loading').classList.add('fade');
+    setTimeout(() => document.getElementById('loading').remove(), 800);
+  }, 2600);
+
+  /* ── NAVBAR SCROLL ── */
+  const mainNav = document.getElementById('mainNav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) mainNav?.classList.add('scrolled');
+    else mainNav?.classList.remove('scrolled');
+  });
+
+  /* ── DATE ── */
+  const dateEl = document.getElementById('currentDate');
+  if (dateEl) {
+    const d = new Date();
+    dateEl.textContent = d.toLocaleDateString('es-PE', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+  }
+
+  /* ── VIEWS ── */
+  function showView(id) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0,0);
+  }
+
+  /* ── LOGIN ── */
+  let selectedRole = 'admin';
+  function openLogin() { document.getElementById('loginModal').classList.add('open'); }
+  function closeLogin() { document.getElementById('loginModal').classList.remove('open'); }
+  function selectRole(r) {
+    selectedRole = r;
+    document.getElementById('roleAdmin').classList.toggle('active', r === 'admin');
+    document.getElementById('roleUser').classList.toggle('active', r === 'user');
+  }
+  function doLogin() {
+    const email = document.getElementById('loginEmail').value.trim();
+    const pass = document.getElementById('loginPass').value.trim();
+    const err = document.getElementById('loginError');
+    const creds = {
+      admin: { email:'admin@sastreria-contreras.com', pass:'admin123', view:'admin-view' },
+      user:  { email:'cliente@sastreria-contreras.com', pass:'cliente123', view:'user-view' }
+    };
+    const c = creds[selectedRole];
+    if (email === c.email && pass === c.pass) {
+      err.style.display = 'none';
+      closeLogin();
+      showView(c.view);
+      if (selectedRole === 'user') {
+        renderCatalog('all');
+        document.getElementById('cartFab').style.display = 'flex';
+      }
+    } else {
+      err.style.display = 'block';
+      err.style.animation = 'none'; err.offsetHeight; err.style.animation = '';
+    }
+  }
+  function doLogout() {
+    cart = [];
+    showView('landing-view');
+    document.getElementById('cartFab').style.display = 'none';
+    document.getElementById('cartSidebar').classList.remove('open');
+    document.getElementById('loginEmail').value = '';
+    document.getElementById('loginPass').value = '';
+    window.scrollTo(0, 0);
+  }
+  document.getElementById('loginModal').addEventListener('click', function(e) {
+    if (e.target === this) closeLogin();
+  });
+
+  /* ── CHATBOT ── */
+  const botResponses = {
+    'gala': 'Para una gala, recomiendo nuestro *Vestido Noche Esmeralda* en seda italiana o el *Conjunto Palazzo* en crepe negro. Ambos incluyen bordados a mano y se pueden personalizar en 5-7 días. ¿Tienes fecha del evento?',
+    'tendencias': 'La temporada 2025 en SASTRERÍA CONTRERAS gira en torno a tres pilares: tonos *tierra y nude*, siluetas *oversize con estructura* en hombros, y telas naturales como lino orgánico y seda. ¿Alguna de estas tendencias te atrae?',
+    'talla': 'Trabajamos con medidas personalizadas. Para tomar tus medidas necesitas: busto, cintura, cadera y talla de espalda. Puedes enviarnos tus medidas por WhatsApp y nuestro equipo te asigna la talla perfecta. ¿Te enviamos la guía?',
+    'envío': 'Sí, realizamos envíos a toda la región Junín, incluyendo Huancayo, La Oroya, Tarma y Jauja. Envíos en 24-48h por courier. En Lima el envío es gratuito en pedidos mayores a S/ 500.',
+    'precio': 'Nuestros precios van desde S/ 180 para blusas artesanales hasta S/ 2,500 para vestidos de noche con bordados exclusivos. ¿Qué tipo de prenda estás buscando para darte un rango más preciso?',
+    'default': ['¡Qué buena consulta! Para ayudarte mejor, ¿puedes contarme para qué ocasión buscas la prenda? Una reunión, evento especial, uso diario...', 'Claro, con gusto te asesoro. En SASTRERÍA CONTRERAS cada prenda se confecciona a medida. ¿Tienes alguna preferencia de color o tela?', 'Excelente elección al considerar SASTRERÍA CONTRERAS. ¿Prefieres algo clásico y atemporal, o buscas algo más vanguardista para esta temporada?']
+  };
+
+  let chatTurn = 0;
+  function sendChat() {
+    const input = document.getElementById('chatInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+    addMsg(msg, 'user');
+    input.value = '';
+    showTyping();
+    setTimeout(() => {
+      hideTyping();
+      const lower = msg.toLowerCase();
+      let resp = botResponses.default[chatTurn % 3];
+      if (lower.includes('gala') || lower.includes('evento') || lower.includes('noche') || lower.includes('prenda')) resp = botResponses['gala'];
+      else if (lower.includes('tendencia') || lower.includes('2025')) resp = botResponses['tendencias'];
+      else if (lower.includes('talla') || lower.includes('medida') || lower.includes('tama')) resp = botResponses['talla'];
+      else if (lower.includes('envío') || lower.includes('envio') || lower.includes('huancayo') || lower.includes('delivery')) resp = botResponses['envío'];
+      else if (lower.includes('precio') || lower.includes('costo') || lower.includes('vale') || lower.includes('cuánto')) resp = botResponses['precio'];
+      chatTurn++;
+      addMsg(resp, 'bot');
+    }, 1400);
+  }
+
+  function sendSuggestion(text) {
+    document.getElementById('chatInput').value = text;
+    sendChat();
+  }
+
+  function addMsg(text, type) {
+    const container = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = `msg ${type}`;
+    div.innerHTML = `<div class="msg-bubble">${text}</div><div class="msg-time">${new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit'})} · ${type==='bot'?'Sophie':'Tú'}</div>`;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function showTyping() { document.getElementById('typingIndicator').style.display = 'flex'; const c = document.getElementById('chatMessages'); c.scrollTop = c.scrollHeight; }
+  function hideTyping() { document.getElementById('typingIndicator').style.display = 'none'; }
+
+  /* ── CATALOG ── */
+  const products = [
+    { id:1, name:'Vestido Esmeralda', cat:'gala', price:1200, icon:'👗', badge:'Exclusivo', color:'#2A2520' },
+    { id:2, name:'Conjunto Palazzo', cat:'gala', price:980, icon:'🥻', badge:null, color:'#3a2d20' },
+    { id:3, name:'Traje Clásico', cat:'formal', price:1400, icon:'🤵', badge:'Nuevo', color:'#2d3a30' },
+    { id:4, name:'Blazer Estructurado', cat:'formal', price:680, icon:'🧥', badge:null, color:'#2A2520' },
+    { id:5, name:'Blusa Seda Natural', cat:'casual', price:320, icon:'👘', badge:null, color:'#3a2828' },
+    { id:6, name:'Pantalón Lino', cat:'casual', price:280, icon:'👖', badge:'Popular', color:'#2d3a35' },
+    { id:7, name:'Abrigo Camel', cat:'abrigos', price:1800, icon:'🧥', badge:'Premium', color:'#3a3020' },
+    { id:8, name:'Chaleco Cashmere', cat:'abrigos', price:920, icon:'🧣', badge:null, color:'#2A2520' },
+    { id:9, name:'Vestido Cocktail', cat:'gala', price:760, icon:'👗', badge:null, color:'#3a2030' },
+    { id:10, name:'Corbata Artesanal', cat:'formal', price:180, icon:'👔', badge:null, color:'#2d3030' },
+    { id:11, name:'Falda Midi', cat:'casual', price:350, icon:'🩱', badge:'New', color:'#302a3a' },
+    { id:12, name:'Abrigo Alpaca', cat:'abrigos', price:2200, icon:'🧥', badge:'Edición Limitada', color:'#2A2520' },
+  ];
+
+  let cart = [];
+
+  function renderCatalog(filter) {
+    const grid = document.getElementById('catalogGrid');
+    const items = filter === 'all' ? products : products.filter(p => p.cat === filter);
+    grid.innerHTML = items.map(p => `
+      <div class="product-card" data-cat="${p.cat}">
+        <div class="product-img" style="background:linear-gradient(135deg,${p.color},${p.color}dd)">
+          ${p.badge ? `<div class="product-badge">${p.badge}</div>` : ''}
+          <span>${p.icon}</span>
+        </div>
+        <div class="product-info">
+          <div class="product-category">${catLabel(p.cat)}</div>
+          <div class="product-name">${p.name}</div>
+          <div class="product-price">S/ ${p.price.toLocaleString()}</div>
+        </div>
+        <div class="product-actions">
+          <button class="add-cart-btn" onclick="addToCart(${p.id})">Agregar</button>
+          <button class="wishlist-btn" onclick="wishlist(${p.id})">♡</button>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function catLabel(c) {
+    const m = {gala:'Gala & Noche',formal:'Formal',casual:'Casual Chic',abrigos:'Abrigos'};
+    return m[c] || c;
+  }
+
+  function filterCatalog(btn, cat) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderCatalog(cat);
+  }
+
+  function addToCart(id) {
+    const p = products.find(x => x.id === id);
+    const existing = cart.find(x => x.id === id);
+    if (existing) existing.qty++;
+    else cart.push({ ...p, qty: 1 });
+    updateCartUI();
+    showToast(`${p.icon} ${p.name} agregado a tu selección`);
+  }
+
+  function wishlist(id) {
+    const p = products.find(x => x.id === id);
+    showToast(`♡ ${p.name} guardado en favoritos`);
+  }
+
+  function removeFromCart(id) {
+    cart = cart.filter(x => x.id !== id);
+    updateCartUI();
+  }
+
+  function updateCartUI() {
+    const badge = document.getElementById('cartBadge');
+    const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+    const count = cart.reduce((s, x) => s + x.qty, 0);
+    badge.textContent = count;
+    document.getElementById('cartTotal').textContent = `S/ ${total.toLocaleString()}`;
+    const itemsEl = document.getElementById('cartItems');
+    if (cart.length === 0) {
+      itemsEl.innerHTML = '<div class="cart-empty">Tu selección está vacía.<br><em>Agrega prendas del catálogo.</em></div>';
+    } else {
+      itemsEl.innerHTML = cart.map(item => `
+        <div class="cart-item">
+          <div class="cart-item-img">${item.icon}</div>
+          <div style="flex:1">
+            <div class="cart-item-name">${item.name}</div>
+            <div class="cart-item-detail">${catLabel(item.cat)} · Cant: ${item.qty}</div>
+            <div class="cart-item-price">S/ ${(item.price * item.qty).toLocaleString()}</div>
+          </div>
+          <button class="cart-item-remove" onclick="removeFromCart(${item.id})">✕</button>
+        </div>
+      `).join('');
+    }
+  }
+
+  function toggleCart() {
+    document.getElementById('cartSidebar').classList.toggle('open');
+  }
+
+  function checkout() {
+    if (cart.length === 0) { showToast('Agrega prendas primero'); return; }
+    const total = cart.reduce((s, x) => s + x.price * x.qty, 0);
+    showToast(`✓ Cotización enviada — Total: S/ ${total.toLocaleString()}`);
+    cart = [];
+    updateCartUI();
+    document.getElementById('cartSidebar').classList.remove('open');
+  }
+
+  /* ── TOAST ── */
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+  }
+</script>
+</body>
+</html>
+
+
+
+
