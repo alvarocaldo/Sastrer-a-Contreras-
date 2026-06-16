@@ -854,159 +854,179 @@
 </div>
 
 <!-- ══════════════════════════════════
-     ADMIN DASHBOARD
+     ADMIN VIEW
 ══════════════════════════════════ -->
 <div class="view" id="admin-view">
-  <header class="app-header">
-    <div class="app-logo">SASTRERÍA CONTRERAS</div>
-    <nav class="app-nav">
-      <button class="app-nav-item active">Dashboard</button>
-      <button class="app-nav-item">Pedidos</button>
-      <button class="app-nav-item">Catálogo</button>
-      <button class="app-nav-item">Clientes</button>
-      <button class="app-nav-item">Reportes</button>
+  <header class="app-header" style="flex-wrap:wrap;height:auto;min-height:64px;padding:0 2rem;">
+    <div class="app-logo" style="flex-shrink:0;padding:1rem 0;">SASTRERÍA CONTRERAS</div>
+    <nav class="app-nav" style="flex:1;justify-content:center;flex-wrap:wrap;">
+      <button class="app-nav-item active" id="nav-dashboard" onclick="showAdminPanel('dashboard')">Dashboard</button>
+      <button class="app-nav-item" id="nav-pedidos" onclick="showAdminPanel('pedidos')">Pedidos</button>
+      <button class="app-nav-item" id="nav-catalogo" onclick="showAdminPanel('catalogo')">Catálogo</button>
+      <button class="app-nav-item" id="nav-clientes" onclick="showAdminPanel('clientes')">Clientes</button>
+      <button class="app-nav-item" id="nav-reportes" onclick="showAdminPanel('reportes')">Reportes</button>
     </nav>
-    <div class="app-user">
-      <span>Administrador</span>
+    <div class="app-user" style="flex-shrink:0;padding:1rem 0;">
+      <span style="font-size:0.65rem;">Administrador</span>
       <div class="app-avatar">A</div>
       <button class="logout-btn" onclick="doLogout()">Salir</button>
     </div>
   </header>
 
-  <div class="dashboard-content">
+  <!-- ── DASHBOARD ── -->
+  <div id="panel-dashboard" class="admin-panel dashboard-content">
     <div class="dashboard-greeting">Buenos días, <em>Atelier</em></div>
     <div class="dashboard-date" id="currentDate"></div>
-
-    <!-- METRICS -->
     <div class="metrics-grid">
-      <div class="metric-card">
-        <div class="metric-trend">📈</div>
-        <div class="metric-label">Ventas este mes</div>
-        <div class="metric-value">S/ 24,830</div>
-        <div class="metric-sub">↑ 18% vs mes anterior</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-trend">🛍</div>
-        <div class="metric-label">Pedidos activos</div>
-        <div class="metric-value">47</div>
-        <div class="metric-sub">12 pendientes de corte</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-trend">👥</div>
-        <div class="metric-label">Clientes nuevos</div>
-        <div class="metric-value">23</div>
-        <div class="metric-sub">Este mes</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-trend">⏱</div>
-        <div class="metric-label">Tiempo prom. confección</div>
-        <div class="metric-value">4.2d</div>
-        <div class="metric-sub">↓ 0.8 días mejora</div>
-      </div>
+      <div class="metric-card"><div class="metric-trend">📈</div><div class="metric-label">Ventas este mes</div><div class="metric-value">S/ 24,830</div><div class="metric-sub">↑ 18% vs mes anterior</div></div>
+      <div class="metric-card"><div class="metric-trend">🛍</div><div class="metric-label">Pedidos activos</div><div class="metric-value">47</div><div class="metric-sub">12 pendientes de corte</div></div>
+      <div class="metric-card"><div class="metric-trend">👥</div><div class="metric-label">Clientes nuevos</div><div class="metric-value">23</div><div class="metric-sub">Este mes</div></div>
+      <div class="metric-card"><div class="metric-trend">⏱</div><div class="metric-label">Tiempo prom. confección</div><div class="metric-value">4.2d</div><div class="metric-sub">↓ 0.8 días mejora</div></div>
     </div>
-
-    <!-- ROW 1 -->
     <div class="dashboard-row">
       <div class="panel">
-        <div class="panel-title">
-          Pedidos recientes
-          <span class="panel-tag">Ver todos →</span>
-        </div>
-        <table class="orders-table">
-          <thead>
-            <tr>
-              <th>#Pedido</th>
-              <th>Cliente</th>
-              <th>Prenda</th>
-              <th>Estado</th>
-              <th>Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr><td>#2501</td><td>María V.</td><td>Vestido Noche</td><td><span class="order-status status-en-proceso">En proceso</span></td><td>S/ 680</td></tr>
-            <tr><td>#2500</td><td>Carlos M.</td><td>Traje Formal</td><td><span class="order-status status-completado">Completado</span></td><td>S/ 1,200</td></tr>
-            <tr><td>#2499</td><td>Lucía R.</td><td>Blusa Seda</td><td><span class="order-status status-pendiente">Pendiente</span></td><td>S/ 320</td></tr>
-            <tr><td>#2498</td><td>Andrés T.</td><td>Abrigo Camel</td><td><span class="order-status status-en-proceso">En proceso</span></td><td>S/ 890</td></tr>
-            <tr><td>#2497</td><td>Sofia P.</td><td>Conjunto Gala</td><td><span class="order-status status-completado">Completado</span></td><td>S/ 1,540</td></tr>
-          </tbody>
-        </table>
+        <div class="panel-title">Pedidos recientes <span class="panel-tag" onclick="showAdminPanel('pedidos')" style="cursor:pointer">Ver todos →</span></div>
+        <table class="orders-table"><thead><tr><th>#Pedido</th><th>Cliente</th><th>Prenda</th><th>Estado</th><th>Total</th></tr></thead>
+        <tbody>
+          <tr><td>#2501</td><td>María V.</td><td>Vestido Noche</td><td><span class="order-status status-en-proceso">En proceso</span></td><td>S/ 680</td></tr>
+          <tr><td>#2500</td><td>Carlos M.</td><td>Traje Formal</td><td><span class="order-status status-completado">Completado</span></td><td>S/ 1,200</td></tr>
+          <tr><td>#2499</td><td>Lucía R.</td><td>Blusa Seda</td><td><span class="order-status status-pendiente">Pendiente</span></td><td>S/ 320</td></tr>
+          <tr><td>#2498</td><td>Andrés T.</td><td>Abrigo Camel</td><td><span class="order-status status-en-proceso">En proceso</span></td><td>S/ 890</td></tr>
+          <tr><td>#2497</td><td>Sofia P.</td><td>Conjunto Gala</td><td><span class="order-status status-completado">Completado</span></td><td>S/ 1,540</td></tr>
+        </tbody></table>
       </div>
       <div class="panel">
-        <div class="panel-title">
-          Ventas por categoría
-          <span class="panel-tag">Jun 2025</span>
-        </div>
+        <div class="panel-title">Ventas por categoría <span class="panel-tag">Jun 2025</span></div>
         <div class="bar-chart">
-          <div class="bar-item">
-            <div class="bar-label">Gala / Noche</div>
-            <div class="bar-track"><div class="bar-fill" style="width:82%"></div></div>
-            <div class="bar-val">82%</div>
-          </div>
-          <div class="bar-item">
-            <div class="bar-label">Formal</div>
-            <div class="bar-track"><div class="bar-fill" style="width:65%"></div></div>
-            <div class="bar-val">65%</div>
-          </div>
-          <div class="bar-item">
-            <div class="bar-label">Casual Chic</div>
-            <div class="bar-track"><div class="bar-fill" style="width:48%"></div></div>
-            <div class="bar-val">48%</div>
-          </div>
-          <div class="bar-item">
-            <div class="bar-label">Abrigos</div>
-            <div class="bar-track"><div class="bar-fill" style="width:35%"></div></div>
-            <div class="bar-val">35%</div>
-          </div>
-          <div class="bar-item">
-            <div class="bar-label">Accesorios</div>
-            <div class="bar-track"><div class="bar-fill" style="width:22%"></div></div>
-            <div class="bar-val">22%</div>
-          </div>
+          <div class="bar-item"><div class="bar-label">Gala / Noche</div><div class="bar-track"><div class="bar-fill" style="width:82%"></div></div><div class="bar-val">82%</div></div>
+          <div class="bar-item"><div class="bar-label">Formal</div><div class="bar-track"><div class="bar-fill" style="width:65%"></div></div><div class="bar-val">65%</div></div>
+          <div class="bar-item"><div class="bar-label">Casual Chic</div><div class="bar-track"><div class="bar-fill" style="width:48%"></div></div><div class="bar-val">48%</div></div>
+          <div class="bar-item"><div class="bar-label">Abrigos</div><div class="bar-track"><div class="bar-fill" style="width:35%"></div></div><div class="bar-val">35%</div></div>
+          <div class="bar-item"><div class="bar-label">Accesorios</div><div class="bar-track"><div class="bar-fill" style="width:22%"></div></div><div class="bar-val">22%</div></div>
         </div>
       </div>
     </div>
-
-    <!-- ROW 2 -->
     <div class="dashboard-row">
       <div class="panel">
-        <div class="panel-title">Estado del taller<span class="panel-tag">Tiempo real</span></div>
+        <div class="panel-title">Estado del taller <span class="panel-tag">Tiempo real</span></div>
         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;">
-          <div style="text-align:center;padding:1.5rem;background:var(--cream);border:1px solid var(--bone)">
-            <div style="font-family:var(--font-display);font-size:2.2rem;color:#2d7a4f">8</div>
-            <div style="font-family:var(--font-body);font-size:0.58rem;letter-spacing:0.2rem;text-transform:uppercase;color:var(--warm-gray);margin-top:0.3rem">Cortando</div>
-          </div>
-          <div style="text-align:center;padding:1.5rem;background:var(--cream);border:1px solid var(--bone)">
-            <div style="font-family:var(--font-display);font-size:2.2rem;color:var(--gold-dark)">14</div>
-            <div style="font-family:var(--font-body);font-size:0.58rem;letter-spacing:0.2rem;text-transform:uppercase;color:var(--warm-gray);margin-top:0.3rem">Cosiendo</div>
-          </div>
-          <div style="text-align:center;padding:1.5rem;background:var(--cream);border:1px solid var(--bone)">
-            <div style="font-family:var(--font-display);font-size:2.2rem;color:#a33030">5</div>
-            <div style="font-family:var(--font-body);font-size:0.58rem;letter-spacing:0.2rem;text-transform:uppercase;color:var(--warm-gray);margin-top:0.3rem">En revisión</div>
-          </div>
+          <div style="text-align:center;padding:1.5rem;background:var(--cream);border:1px solid var(--bone)"><div style="font-family:var(--font-display);font-size:2.2rem;color:#2d7a4f">8</div><div style="font-family:var(--font-body);font-size:0.58rem;letter-spacing:0.2rem;text-transform:uppercase;color:var(--warm-gray);margin-top:0.3rem">Cortando</div></div>
+          <div style="text-align:center;padding:1.5rem;background:var(--cream);border:1px solid var(--bone)"><div style="font-family:var(--font-display);font-size:2.2rem;color:var(--gold-dark)">14</div><div style="font-family:var(--font-body);font-size:0.58rem;letter-spacing:0.2rem;text-transform:uppercase;color:var(--warm-gray);margin-top:0.3rem">Cosiendo</div></div>
+          <div style="text-align:center;padding:1.5rem;background:var(--cream);border:1px solid var(--bone)"><div style="font-family:var(--font-display);font-size:2.2rem;color:#a33030">5</div><div style="font-family:var(--font-body);font-size:0.58rem;letter-spacing:0.2rem;text-transform:uppercase;color:var(--warm-gray);margin-top:0.3rem">En revisión</div></div>
         </div>
       </div>
       <div class="panel">
-        <div class="panel-title">Clientes VIP<span class="panel-tag">Top compradores</span></div>
+        <div class="panel-title">Clientes VIP <span class="panel-tag">Top compradores</span></div>
         <div class="clients-list">
-          <div class="client-item">
-            <div class="client-avatar">MV</div>
-            <div><div class="client-name">María Valdiviezo</div><div class="client-detail">12 pedidos · Lima</div></div>
-            <div class="client-amount">S/ 8,400</div>
+          <div class="client-item"><div class="client-avatar">MV</div><div><div class="client-name">María Valdiviezo</div><div class="client-detail">12 pedidos · Lima</div></div><div class="client-amount">S/ 8,400</div></div>
+          <div class="client-item"><div class="client-avatar">SP</div><div><div class="client-name">Sofia Paredes</div><div class="client-detail">9 pedidos · Huancayo</div></div><div class="client-amount">S/ 6,200</div></div>
+          <div class="client-item"><div class="client-avatar">AT</div><div><div class="client-name">Andrés Torres</div><div class="client-detail">7 pedidos · Cusco</div></div><div class="client-amount">S/ 5,100</div></div>
+          <div class="client-item"><div class="client-avatar">LR</div><div><div class="client-name">Lucía Ríos</div><div class="client-detail">6 pedidos · Arequipa</div></div><div class="client-amount">S/ 3,890</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── PEDIDOS ── -->
+  <div id="panel-pedidos" class="admin-panel dashboard-content" style="display:none">
+    <div class="dashboard-greeting">Gestión de <em>Pedidos</em></div>
+    <div class="dashboard-date">Todos los pedidos activos y completados</div>
+    <div style="display:flex;gap:1rem;margin:1.5rem 0;flex-wrap:wrap;">
+      <button class="filter-btn active" onclick="filterOrders(this,'all')" style="font-size:0.6rem;padding:0.5rem 1.2rem">Todos</button>
+      <button class="filter-btn" onclick="filterOrders(this,'En proceso')" style="font-size:0.6rem;padding:0.5rem 1.2rem">En proceso</button>
+      <button class="filter-btn" onclick="filterOrders(this,'Completado')" style="font-size:0.6rem;padding:0.5rem 1.2rem">Completados</button>
+      <button class="filter-btn" onclick="filterOrders(this,'Pendiente')" style="font-size:0.6rem;padding:0.5rem 1.2rem">Pendientes</button>
+    </div>
+    <div class="panel">
+      <table class="orders-table" id="ordersTable">
+        <thead><tr><th>#Pedido</th><th>Fecha</th><th>Cliente</th><th>Prenda</th><th>Talla</th><th>Estado</th><th>Total</th><th>Acción</th></tr></thead>
+        <tbody id="ordersBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── CATÁLOGO ADMIN ── -->
+  <div id="panel-catalogo" class="admin-panel dashboard-content" style="display:none">
+    <div class="dashboard-greeting">Catálogo de <em>Prendas</em></div>
+    <div class="dashboard-date">Administra las prendas disponibles para clientes</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin:1.5rem 0;">
+      <div style="font-family:var(--font-body);font-size:0.65rem;color:var(--warm-gray);letter-spacing:0.1rem">12 prendas registradas</div>
+      <button class="btn-primary" style="font-size:0.6rem;padding:0.6rem 1.5rem" onclick="showToast('✓ Funcionalidad de agregar prenda disponible próximamente')">+ Nueva Prenda</button>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;" id="adminCatalogGrid"></div>
+  </div>
+
+  <!-- ── CLIENTES ── -->
+  <div id="panel-clientes" class="admin-panel dashboard-content" style="display:none">
+    <div class="dashboard-greeting">Directorio de <em>Clientes</em></div>
+    <div class="dashboard-date">Base de clientes registrados</div>
+    <div class="metrics-grid" style="grid-template-columns:repeat(3,1fr);margin-bottom:2rem;">
+      <div class="metric-card"><div class="metric-label">Total clientes</div><div class="metric-value">148</div><div class="metric-sub">Registrados</div></div>
+      <div class="metric-card"><div class="metric-label">Clientes activos</div><div class="metric-value">94</div><div class="metric-sub">Últimos 90 días</div></div>
+      <div class="metric-card"><div class="metric-label">Ticket promedio</div><div class="metric-value">S/ 720</div><div class="metric-sub">Por cliente</div></div>
+    </div>
+    <div class="panel">
+      <div class="panel-title">Todos los clientes <span class="panel-tag">Ordenado por actividad</span></div>
+      <table class="orders-table">
+        <thead><tr><th>Cliente</th><th>Ciudad</th><th>Teléfono</th><th>Pedidos</th><th>Total gastado</th><th>Último pedido</th><th>Estado</th></tr></thead>
+        <tbody>
+          <tr><td><div style="display:flex;align-items:center;gap:0.6rem"><div class="client-avatar" style="width:28px;height:28px;font-size:0.7rem">MV</div>María Valdiviezo</div></td><td>Lima</td><td>+51 987 654 321</td><td>12</td><td>S/ 8,400</td><td>02/Jun/2025</td><td><span class="order-status status-completado">VIP</span></td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:0.6rem"><div class="client-avatar" style="width:28px;height:28px;font-size:0.7rem">SP</div>Sofia Paredes</div></td><td>Huancayo</td><td>+51 964 321 098</td><td>9</td><td>S/ 6,200</td><td>28/May/2025</td><td><span class="order-status status-completado">VIP</span></td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:0.6rem"><div class="client-avatar" style="width:28px;height:28px;font-size:0.7rem">AT</div>Andrés Torres</div></td><td>Cusco</td><td>+51 921 543 876</td><td>7</td><td>S/ 5,100</td><td>25/May/2025</td><td><span class="order-status status-completado">VIP</span></td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:0.6rem"><div class="client-avatar" style="width:28px;height:28px;font-size:0.7rem">LR</div>Lucía Ríos</div></td><td>Arequipa</td><td>+51 943 210 765</td><td>6</td><td>S/ 3,890</td><td>20/May/2025</td><td><span class="order-status status-en-proceso">Activo</span></td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:0.6rem"><div class="client-avatar" style="width:28px;height:28px;font-size:0.7rem">CM</div>Carlos Morales</div></td><td>Lima</td><td>+51 956 789 012</td><td>5</td><td>S/ 3,200</td><td>15/May/2025</td><td><span class="order-status status-en-proceso">Activo</span></td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:0.6rem"><div class="client-avatar" style="width:28px;height:28px;font-size:0.7rem">RG</div>Rosa Gutiérrez</div></td><td>Huancayo</td><td>+51 912 345 678</td><td>4</td><td>S/ 2,400</td><td>10/May/2025</td><td><span class="order-status status-en-proceso">Activo</span></td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:0.6rem"><div class="client-avatar" style="width:28px;height:28px;font-size:0.7rem">JC</div>Jorge Castillo</div></td><td>Tarma</td><td>+51 978 901 234</td><td>2</td><td>S/ 980</td><td>01/May/2025</td><td><span class="order-status status-pendiente">Nuevo</span></td></tr>
+          <tr><td><div style="display:flex;align-items:center;gap:0.6rem"><div class="client-avatar" style="width:28px;height:28px;font-size:0.7rem">PM</div>Patricia Medina</div></td><td>Huancayo</td><td>+51 934 567 890</td><td>1</td><td>S/ 450</td><td>28/Abr/2025</td><td><span class="order-status status-pendiente">Nuevo</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── REPORTES ── -->
+  <div id="panel-reportes" class="admin-panel dashboard-content" style="display:none">
+    <div class="dashboard-greeting">Reportes & <em>Análisis</em></div>
+    <div class="dashboard-date">Resumen financiero y operativo — Junio 2025</div>
+    <div class="metrics-grid" style="margin-bottom:2rem;">
+      <div class="metric-card"><div class="metric-trend">💰</div><div class="metric-label">Ingresos totales</div><div class="metric-value">S/ 89,240</div><div class="metric-sub">Acumulado 2025</div></div>
+      <div class="metric-card"><div class="metric-trend">📦</div><div class="metric-label">Pedidos totales</div><div class="metric-value">186</div><div class="metric-sub">Ene — Jun 2025</div></div>
+      <div class="metric-card"><div class="metric-trend">⭐</div><div class="metric-label">Satisfacción</div><div class="metric-value">4.9</div><div class="metric-sub">Calificación promedio</div></div>
+      <div class="metric-card"><div class="metric-trend">🔄</div><div class="metric-label">Clientes recurrentes</div><div class="metric-value">68%</div><div class="metric-sub">Recompra confirmada</div></div>
+    </div>
+    <div class="dashboard-row">
+      <div class="panel">
+        <div class="panel-title">Ventas mensuales 2025 <span class="panel-tag">Soles (S/)</span></div>
+        <div class="bar-chart" style="gap:1.1rem;">
+          <div class="bar-item"><div class="bar-label">Enero</div><div class="bar-track"><div class="bar-fill" style="width:52%"></div></div><div class="bar-val">S/ 12,480</div></div>
+          <div class="bar-item"><div class="bar-label">Febrero</div><div class="bar-track"><div class="bar-fill" style="width:44%"></div></div><div class="bar-val">S/ 10,560</div></div>
+          <div class="bar-item"><div class="bar-label">Marzo</div><div class="bar-track"><div class="bar-fill" style="width:60%"></div></div><div class="bar-val">S/ 14,400</div></div>
+          <div class="bar-item"><div class="bar-label">Abril</div><div class="bar-track"><div class="bar-fill" style="width:58%"></div></div><div class="bar-val">S/ 13,920</div></div>
+          <div class="bar-item"><div class="bar-label">Mayo</div><div class="bar-track"><div class="bar-fill" style="width:73%"></div></div><div class="bar-val">S/ 17,550</div></div>
+          <div class="bar-item"><div class="bar-label">Junio</div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><div class="bar-val">S/ 24,830</div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Resumen operativo <span class="panel-tag">Jun 2025</span></div>
+        <div style="display:flex;flex-direction:column;gap:1rem;">
+          <div style="display:flex;justify-content:space-between;padding:0.8rem 0;border-bottom:1px solid var(--bone);">
+            <span style="font-family:var(--font-body);font-size:0.68rem;color:var(--warm-gray)">Tela consumida</span>
+            <span style="font-family:var(--font-display);font-size:1rem;color:var(--charcoal)">342 metros</span>
           </div>
-          <div class="client-item">
-            <div class="client-avatar">SP</div>
-            <div><div class="client-name">Sofia Paredes</div><div class="client-detail">9 pedidos · Huancayo</div></div>
-            <div class="client-amount">S/ 6,200</div>
+          <div style="display:flex;justify-content:space-between;padding:0.8rem 0;border-bottom:1px solid var(--bone);">
+            <span style="font-family:var(--font-body);font-size:0.68rem;color:var(--warm-gray)">Horas de confección</span>
+            <span style="font-family:var(--font-display);font-size:1rem;color:var(--charcoal)">1,240 hrs</span>
           </div>
-          <div class="client-item">
-            <div class="client-avatar">AT</div>
-            <div><div class="client-name">Andrés Torres</div><div class="client-detail">7 pedidos · Cusco</div></div>
-            <div class="client-amount">S/ 5,100</div>
+          <div style="display:flex;justify-content:space-between;padding:0.8rem 0;border-bottom:1px solid var(--bone);">
+            <span style="font-family:var(--font-body);font-size:0.68rem;color:var(--warm-gray)">Devoluciones</span>
+            <span style="font-family:var(--font-display);font-size:1rem;color:#2d7a4f">2 (0.4%)</span>
           </div>
-          <div class="client-item">
-            <div class="client-avatar">LR</div>
-            <div><div class="client-name">Lucía Ríos</div><div class="client-detail">6 pedidos · Arequipa</div></div>
-            <div class="client-amount">S/ 3,890</div>
+          <div style="display:flex;justify-content:space-between;padding:0.8rem 0;border-bottom:1px solid var(--bone);">
+            <span style="font-family:var(--font-body);font-size:0.68rem;color:var(--warm-gray)">Pedidos urgentes</span>
+            <span style="font-family:var(--font-display);font-size:1rem;color:var(--gold-dark)">8</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:0.8rem 0;">
+            <span style="font-family:var(--font-body);font-size:0.68rem;color:var(--warm-gray)">Margen neto estimado</span>
+            <span style="font-family:var(--font-display);font-size:1rem;color:#2d7a4f">38%</span>
           </div>
         </div>
       </div>
@@ -1138,7 +1158,73 @@
     if (e.target === this) closeLogin();
   });
 
-  /* ── CHATBOT ── */
+  /* ── ADMIN PANELS ── */
+  const allOrders = [
+    { id:'#2501', fecha:'03/Jun/2025', cliente:'María Valdiviezo', prenda:'Vestido Noche', talla:'M', estado:'En proceso', total:680 },
+    { id:'#2500', fecha:'02/Jun/2025', cliente:'Carlos Morales', prenda:'Traje Formal', talla:'L', estado:'Completado', total:1200 },
+    { id:'#2499', fecha:'01/Jun/2025', cliente:'Lucía Ríos', prenda:'Blusa Seda', talla:'S', estado:'Pendiente', total:320 },
+    { id:'#2498', fecha:'31/May/2025', cliente:'Andrés Torres', prenda:'Abrigo Camel', talla:'XL', estado:'En proceso', total:890 },
+    { id:'#2497', fecha:'30/May/2025', cliente:'Sofia Paredes', prenda:'Conjunto Gala', talla:'M', estado:'Completado', total:1540 },
+    { id:'#2496', fecha:'29/May/2025', cliente:'Rosa Gutiérrez', prenda:'Falda Midi', talla:'S', estado:'Completado', total:350 },
+    { id:'#2495', fecha:'28/May/2025', cliente:'Jorge Castillo', prenda:'Chaleco Cashmere', talla:'L', estado:'Pendiente', total:920 },
+    { id:'#2494', fecha:'27/May/2025', cliente:'Patricia Medina', prenda:'Vestido Cocktail', talla:'M', estado:'En proceso', total:760 },
+    { id:'#2493', fecha:'26/May/2025', cliente:'María Valdiviezo', prenda:'Blusa Seda', talla:'M', estado:'Completado', total:320 },
+    { id:'#2492', fecha:'25/May/2025', cliente:'Andrés Torres', prenda:'Traje Formal', talla:'XL', estado:'Completado', total:1400 },
+  ];
+
+  function renderOrders(filter) {
+    const list = filter === 'all' ? allOrders : allOrders.filter(o => o.estado === filter);
+    const stMap = { 'En proceso':'status-en-proceso', 'Completado':'status-completado', 'Pendiente':'status-pendiente' };
+    document.getElementById('ordersBody').innerHTML = list.map(o => `
+      <tr>
+        <td style="font-weight:500">${o.id}</td>
+        <td>${o.fecha}</td>
+        <td>${o.cliente}</td>
+        <td>${o.prenda}</td>
+        <td>${o.talla}</td>
+        <td><span class="order-status ${stMap[o.estado]}">${o.estado}</span></td>
+        <td>S/ ${o.total.toLocaleString()}</td>
+        <td><button onclick="showToast('✓ Pedido ${o.id} actualizado')" style="background:none;border:1px solid var(--bone);padding:0.3rem 0.7rem;font-family:var(--font-body);font-size:0.55rem;letter-spacing:0.1rem;cursor:pointer;color:var(--warm-gray);transition:all 0.3s" onmouseover="this.style.borderColor='var(--gold)';this.style.color='var(--gold)'" onmouseout="this.style.borderColor='var(--bone)';this.style.color='var(--warm-gray)'">Editar</button></td>
+      </tr>
+    `).join('');
+  }
+
+  function filterOrders(btn, filter) {
+    document.querySelectorAll('#panel-pedidos .filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderOrders(filter);
+  }
+
+  function renderAdminCatalog() {
+    const grid = document.getElementById('adminCatalogGrid');
+    if (!grid) return;
+    grid.innerHTML = products.map(p => `
+      <div style="background:var(--ivory);border:1px solid var(--bone);overflow:hidden;transition:all 0.3s" onmouseover="this.style.borderColor='var(--gold)'" onmouseout="this.style.borderColor='var(--bone)'">
+        <div style="background:linear-gradient(135deg,${p.color},${p.color}cc);height:120px;display:flex;align-items:center;justify-content:center;font-size:2.5rem">${p.icon}</div>
+        <div style="padding:0.8rem">
+          <div style="font-family:var(--font-body);font-size:0.55rem;letter-spacing:0.15rem;text-transform:uppercase;color:var(--warm-gray)">${catLabel(p.cat)}</div>
+          <div style="font-family:var(--font-display);font-size:1rem;color:var(--charcoal);margin:0.2rem 0">${p.name}</div>
+          <div style="font-family:var(--font-body);font-size:0.72rem;color:var(--gold-dark);font-weight:500">S/ ${p.price.toLocaleString()}</div>
+          <div style="display:flex;gap:0.4rem;margin-top:0.6rem">
+            <button onclick="showToast('✏️ Editando: ${p.name}')" style="flex:1;background:none;border:1px solid var(--bone);padding:0.35rem;font-family:var(--font-body);font-size:0.55rem;cursor:pointer;color:var(--warm-gray)">Editar</button>
+            <button onclick="showToast('🗑 ${p.name} eliminado del catálogo')" style="background:none;border:1px solid var(--bone);padding:0.35rem 0.6rem;font-family:var(--font-body);font-size:0.55rem;cursor:pointer;color:#a33030">✕</button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function showAdminPanel(name) {
+    document.querySelectorAll('.admin-panel').forEach(p => p.style.display = 'none');
+    document.querySelectorAll('.app-nav-item').forEach(b => b.classList.remove('active'));
+    document.getElementById('panel-' + name).style.display = 'block';
+    document.getElementById('nav-' + name).classList.add('active');
+    window.scrollTo(0, 0);
+    if (name === 'pedidos') renderOrders('all');
+    if (name === 'catalogo') renderAdminCatalog();
+  }
+
+  /* ── ADMIN PANELS ── */
   const botResponses = {
     'gala': 'Para una gala, recomiendo nuestro *Vestido Noche Esmeralda* en seda italiana o el *Conjunto Palazzo* en crepe negro. Ambos incluyen bordados a mano y se pueden personalizar en 5-7 días. ¿Tienes fecha del evento?',
     'tendencias': 'La temporada 2025 en SASTRERÍA CONTRERAS gira en torno a tres pilares: tonos *tierra y nude*, siluetas *oversize con estructura* en hombros, y telas naturales como lino orgánico y seda. ¿Alguna de estas tendencias te atrae?',
@@ -1306,7 +1392,3 @@
 </script>
 </body>
 </html>
-
-
-
-
